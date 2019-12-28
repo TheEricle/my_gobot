@@ -1,28 +1,28 @@
 package main
 
 import (
-        "time"
+  "time"
 
-        "gobot.io/x/gobot"
-        "gobot.io/x/gobot/drivers/gpio"
-        "gobot.io/x/gobot/platforms/firmata"
+  "gobot.io/x/gobot"
+  "gobot.io/x/gobot/drivers/gpio"
+  "gobot.io/x/gobot/platforms/firmata"
 )
 
 func main() {
-        firmataAdaptor := firmata.NewTCPAdaptor("192.168.0.66:3030")
-        led := gpio.NewLedDriver(firmataAdaptor, "2")
+  firmataAdaptor := firmata.NewAdaptor("/dev/cu.usbmodem14101")
+  led := gpio.NewLedDriver(firmataAdaptor, "13")
 
-        work := func() {
-                gobot.Every(1*time.Second, func() {
-                        led.Toggle()
-                })
-        }
+  work := func() {
+    gobot.Every(1*time.Second, func() {
+      led.Toggle()
+    })
+  }
 
-        robot := gobot.NewRobot("bot",
-                []gobot.Connection{firmataAdaptor},
-                []gobot.Device{led},
-                work,
-        )
+  robot := gobot.NewRobot("bot",
+    []gobot.Connection{firmataAdaptor},
+    []gobot.Device{led},
+    work,
+  )
 
-        robot.Start()
+  robot.Start()
 }
